@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Cabal.Fail.One ()
+import Cabal.Issue.Mcmxix ()
 
 main :: IO ()
 main = return ()

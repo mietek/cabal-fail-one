@@ -1,50 +1,32 @@
-all: test doc
+prefix ?= /usr/local
 
-DEP = .cabal-sandbox
-CONFIGURE = dist/setup-config
 
-ifndef PREFIX
-	PREFIX = /usr/local
-endif
+all: doc
 
-.PHONY: install dep configure build test run doc clean depclean
 
-install: $(DEP)
-	cabal install \
-	  --enable-documentation \
-	  --enable-tests \
-	  --global \
-	  --ignore-sandbox \
-	  --haddock-executables \
-	  --prefix=$(PREFIX) \
-	  --reorder-goals \
-	  --run-tests
+.PHONY: dep configure build test run doc clean depclean
 
-$(DEP):
+.cabal-sandbox:
 	cabal sandbox init
-	cabal install \
-	  --dependencies-only \
-	  --enable-documentation \
-	  --enable-tests \
-	  --reorder-goals
+	cabal install --dependencies-only --enable-documentation --enable-tests --reorder-goals
 
-$(CONFIGURE): $(DEP)
+dep: .cabal-sandbox
+
+dist/setup-config: dep
 	cabal configure --enable-tests
 
-dep: $(DEP)
+configure: dist/setup-config
 
-configure: $(CONFIGURE)
-
-build: $(CONFIGURE)
+build: configure
 	cabal build
 
-test: $(CONFIGURE)
+test: configure
 	cabal test --show-details=streaming --test-options=$(ARGS)
 
-run: $(CONFIGURE)
+run: configure
 	cabal run -- $(ARGS)
 
-doc: $(CONFIGURE)
+doc: configure
 	cabal haddock --executables
 
 clean:
@@ -52,3 +34,9 @@ clean:
 
 depclean:
 	rm -rf .cabal-sandbox cabal.sandbox.config dist
+
+
+.PHONY: install
+
+install: .cabal-sandbox
+	cabal --ignore-sandbox --no-require-sandbox install --enable-documentation --enable-tests --global --haddock-executables --prefix=$(prefix) --reorder-goals --run-tests
