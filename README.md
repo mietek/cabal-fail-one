@@ -1,3 +1,10 @@
+-------------------------------------------------------------------------------
+
+This project is no longer maintained.
+
+-------------------------------------------------------------------------------
+
+
 cabal-issue-mcmxix
 ==================
 
@@ -37,4 +44,4 @@ Tested with GHC 7.8.3 and cabal-install 1.20.0.3.
 License
 -------
 
-[MIT](https://github.com/mietek/cabal-issue-mcmxix/blob/master/LICENSE.md) © [Miëtek Bak](http://mietek.io/)
+BSD © [Miëtek Bak](http://mietek.io/)
